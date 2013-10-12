@@ -48,7 +48,7 @@ class Resource:
         if self._content is None:
             html = Fetcher.get(self._url)
             self._content = BeautifulSoup(html)
-        elif type(self._content) is str:
+        elif isinstance(self._content, str):
             self._content = BeautifulSoup(self._content)
 
     def __str__(self):
