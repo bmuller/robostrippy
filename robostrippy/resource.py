@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from compiler.ast import flatten
+from urlparse import urlparse
 
 from robostrippy.http import Fetcher
 
@@ -47,6 +48,8 @@ class Resource:
         if self._content is None:
             html = Fetcher.get(self._url)
             self._content = BeautifulSoup(html)
+        elif type(self._content) is str:
+            self._content = BeautifulSoup(self._content)
 
     def __str__(self):
         props = []
@@ -54,5 +57,27 @@ class Resource:
             if not key.startswith("_"):
                 props.append("%s='%s'" % (key, getattr(self, key)))
         return "<%s %s>" % (self.__class__.__name__, ", ".join(props))
+
+    def absoluteURL(self, url):
+        if url.startswith('http://') or url.startswith('https://'):
+            return url
+
+        parsed = urlparse(self._url)
+        scheme = parsed.scheme or 'http'
+        if url.startswith('//'):
+            return "%s:%s" % (scheme, url)
+
+        # absolute
+        if url.startswith('/'):
+            return "%s://%s%s" % (parsed.scheme, parsed.netloc, url)
+
+        # relative, but source ends in '/', as in http://something.com/blah/blah
+        if parsed.path.endswith('/'):
+            return "%s://%s%s%s" % (parsed.scheme, parsed.netloc, parsed.path, url)
+
+        # relative, but url source has crap after /
+        parts = parsed.path.split('/')[:-1]
+        path = "/".join(parts) + "/"
+        return "%s://%s%s%s" % (parsed.scheme, parsed.netloc, path, url)
 
     __repr__ = __str__
