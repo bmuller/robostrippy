@@ -22,6 +22,8 @@ class attr(object):
         if len(matches) == 0:
             return None
         if self.attribute is not None:
+            if self.all:
+                return [match.get(self.attribute) for match in matches]
             return matches[0].get(self.attribute)
         if self.all:
             return [self.text(elem) for elem in matches]

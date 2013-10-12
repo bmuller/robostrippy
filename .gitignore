@@ -1,3 +1,4 @@
 dist
 build
 robostrippy.egg-info
+*.pyc
