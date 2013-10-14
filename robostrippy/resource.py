@@ -1,17 +1,22 @@
 from bs4 import BeautifulSoup
 from compiler.ast import flatten
-from urlparse import urlparse
 
 from robostrippy.http import Fetcher
-
+from robostrippy import utils
 
 class attr(object):
-    def __init__(self, selectors, attribute=None, all=False):
+    def __init__(self, selectors, attribute=None, all=False, elems=False):
+        """
+        @param attribute Get attribute from element (default is cdata text)
+        @param all Return all matches (not just first)
+        @param elems Return BeautifulSoup elements that match (will return list)
+        """
         self.selectors = selectors
         if not isinstance(self.selectors, list):
             self.selectors = [self.selectors]
         self.attribute = attribute
         self.all = all
+        self.elems = elems
 
     def text(self, elem):
         return "".join([s.strip() for s in elem.strings])
@@ -20,6 +25,8 @@ class attr(object):
         matches = obj._content.select(self.selectors[0])
         for selector in self.selectors[1:]:
             matches = flatten([match.select(selector) for match in matches])
+        if self.elems:
+            return matches
         if len(matches) == 0:
             return None
         if self.attribute is not None:
@@ -59,25 +66,6 @@ class Resource:
         return "<%s %s>" % (self.__class__.__name__, ", ".join(props))
 
     def absoluteURL(self, url):
-        if url.startswith('http://') or url.startswith('https://'):
-            return url
-
-        parsed = urlparse(self._url)
-        scheme = parsed.scheme or 'http'
-        if url.startswith('//'):
-            return "%s:%s" % (scheme, url)
-
-        # absolute
-        if url.startswith('/'):
-            return "%s://%s%s" % (parsed.scheme, parsed.netloc, url)
-
-        # relative, but source ends in '/', as in http://something.com/blah/blah
-        if parsed.path.endswith('/'):
-            return "%s://%s%s%s" % (parsed.scheme, parsed.netloc, parsed.path, url)
-
-        # relative, but url source has crap after /
-        parts = parsed.path.split('/')[:-1]
-        path = "/".join(parts) + "/"
-        return "%s://%s%s%s" % (parsed.scheme, parsed.netloc, path, url)
+        return utils.absoluteURL(self._url, url)
 
     __repr__ = __str__
