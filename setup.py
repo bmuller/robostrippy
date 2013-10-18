@@ -13,5 +13,5 @@ setup(
     url="http://github.com/bmuller/robostrippy",
     packages=find_packages(),
     requires=["bs4.BeautifulSoup", "requests"],
-    install_requires=["beautifulsoup4 >= 4.3.1", "requests >= 1.2.3"]
+    install_requires=["beautifulsoup4 >= 4.3.1", "requests >= 1.2.3", "lxml >= 3.2.3"]
 )

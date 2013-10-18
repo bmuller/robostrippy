@@ -4,12 +4,14 @@ from compiler.ast import flatten
 from robostrippy.http import Fetcher
 from robostrippy import utils
 
+
 class attr(object):
     def __init__(self, selectors, attribute=None, all=False, elems=False):
         """
         @param attribute Get attribute from element (default is cdata text)
         @param all Return all matches (not just first)
-        @param elems Return BeautifulSoup elements that match (will return list)
+        @param elems Return BeautifulSoup elements that match (will return
+        list)
         """
         self.selectors = selectors
         if not isinstance(self.selectors, list):
@@ -54,9 +56,9 @@ class Resource:
         self._content = content
         if self._content is None:
             html = Fetcher.get(self._url)
-            self._content = BeautifulSoup(html)
+            self._content = BeautifulSoup(html, "lxml")
         elif isinstance(self._content, str):
-            self._content = BeautifulSoup(self._content)
+            self._content = BeautifulSoup(self._content, "lxml")
 
     def __str__(self):
         props = []

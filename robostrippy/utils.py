@@ -1,5 +1,6 @@
 from urlparse import urlparse
 
+
 def absoluteURL(baseurl, url):
     if url.startswith('http://') or url.startswith('https://'):
         return url
@@ -16,7 +17,7 @@ def absoluteURL(baseurl, url):
     # relative, but source ends in '/', as in http://something.com/blah/blah
     if parsed.path.endswith('/'):
         return "%s://%s%s%s" % (parsed.scheme, parsed.netloc, parsed.path, url)
-        
+
     # relative, but url source has crap after /
     parts = parsed.path.split('/')[:-1]
     path = "/".join(parts) + "/"
