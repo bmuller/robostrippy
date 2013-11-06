@@ -83,5 +83,11 @@ details = business.details
 print "lives at %s" % details.address
 print "with phone # %s" % details.phone
 ```
+###Missing elements
+What if the element you are looking for is missing? You can specify an alternative element to use with .otherwise():
+
+```python
+title = attr('meta[property="og:title"]', attribute='content').otherwise(attr('meta[name="twitter:title"]', attribute='content')).otherwise(attr('title'))
+```
 
 See the examples folder for other examples.
