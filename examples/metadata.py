@@ -1,4 +1,3 @@
-import sys
 from robostrippy.resource import attrCoalesce, Resource
 
 class MetadataScraper(Resource):
