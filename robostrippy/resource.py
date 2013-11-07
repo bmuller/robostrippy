@@ -39,16 +39,19 @@ class attr(object):
             return [self.text(elem) for elem in matches]
         return self.text(matches[0])
 
+
 class attrCoalesce(object):
-    def __init__(self,*args):
-        self.alternatives = [attr(*params) for params in args]
+    def __init__(self, *args):
+        self.selectors = args
 
     def __get__(self, obj, objtype):
-        result = None
-        for alternative in self.alternatives:
-            result = alternative.__get__(obj, objtype)
-            if result: return result
-        return result
+        for sargs in self.selectors:
+            alt = attr(sargs[0]) if len(sargs) < 2 else attr(sargs[0], **sargs[1])
+            result = alt.__get__(obj, objtype)
+            if result is not None:
+                return result
+        return None
+
 
 class attrList(object):
     def __init__(self, selector, klass):

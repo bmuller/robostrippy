@@ -87,9 +87,9 @@ print "with phone # %s" % details.phone
 What if the element you are looking for is missing? You can specify an alternative element to use thanks to the attrCoalesce class:
 
 ```python
-title = attrCoalesce(('meta[property="og:title"]', 'content'),
-                     ('meta[name="twitter:title"]', 'content'),
-                     ('title',None))
+title = attrCoalesce(('meta[property="og:title"]', {'attribute': 'content'}),
+                     ('meta[name="twitter:title"]', {'attribute': 'content'}),
+                     ('title'))
 ```
 
 See the examples folder for other examples.
