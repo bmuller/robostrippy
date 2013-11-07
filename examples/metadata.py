@@ -1,16 +1,17 @@
-from robostrippy.resource import attr, attrList, Resource
+import sys
+from robostrippy.resource import attrCoalesce, Resource
 
-class GenericScraper(Resource):
-    image       = attr('meta[name="twitter:image"]', attribute='content').otherwise(attr('meta[name="twitter:image:src"]', attribute='content')).otherwise(attr('meta[name="twitter:image0:src"]', attribute='content')).otherwise(attr('meta[property="og:image"]', attribute='content'))
-    title       = attr('meta[property="og:title"]', attribute='content').otherwise(attr('meta[name="twitter:title"]', attribute='content')).otherwise(attr('title'))
-    description = attr('meta[property="og:description"]', attribute='content').otherwise(attr('meta[name="twitter:description"]', attribute='content'))
+class MetadataScraper(Resource):
+    image       = attrCoalesce(('meta[name="twitter:image"]', 'content'), ('meta[name="twitter:image:src"]', 'content'), ('meta[name="twitter:image0:src"]', 'content'), ('meta[property="og:image"]', 'content'))
+    title       = attrCoalesce(('meta[property="og:title"]', 'content'), ('meta[name="twitter:title"]', 'content'), ('title',None))
+    description = attrCoalesce(('meta[property="og:description"]', 'content'), ('meta[name="twitter:description"]', 'content'))
 
     def __init__(self, url):
     	Resource.__init__(self, url)
         print("Scraping page %s ... ... ..." % url)
         
 if __name__ == '__main__' : 
-    scraper = GenericScraper("http://seen.co/event/new-york-tech-meetup-new-york-ny-2013-3250")
+    scraper = MetadataScraper("http://seen.co/event/twitteripo--2013-5386")
     print(scraper.title)
     print(scraper.image)
     print(scraper.description)

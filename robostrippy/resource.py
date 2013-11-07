@@ -19,39 +19,36 @@ class attr(object):
         self.attribute = attribute
         self.all = all
         self.elems = elems
-        self.otherwise_provided_result = None
 
     def text(self, elem):
         return "".join([s.strip() for s in elem.strings])
-
-    def otherwise(self, attrObj):
-        if not self.otherwise_provided_result:
-            self.otherwise_provided_result = attrObj
-        else:
-            self.otherwise_provided_result.otherwise(attrObj)
-        return self
-
-    def recursiveReturn(self,result,obj):
-        if not result:
-            result =  self.otherwise_provided_result.__get__(obj,type(obj)) if self.otherwise_provided_result else result
-        return result
 
     def __get__(self, obj, objtype):
         matches = obj._content.select(self.selectors[0])
         for selector in self.selectors[1:]:
             matches = flatten([match.select(selector) for match in matches])
         if self.elems:
-            return self.recursiveReturn(matches,obj)
+            return matches
         if len(matches) == 0:
-            return self.recursiveReturn(None,obj)
+            return None
         if self.attribute is not None:
             if self.all:
-                return self.recursiveReturn([match.get(self.attribute) for match in matches],obj)
-            return self.recursiveReturn(matches[0].get(self.attribute),obj)
+                return [match.get(self.attribute) for match in matches]
+            return matches[0].get(self.attribute)
         if self.all:
-            return self.recursiveReturn([self.text(elem) for elem in matches],obj)
-        return self.recursiveReturn(self.text(matches[0]),obj)
+            return [self.text(elem) for elem in matches]
+        return self.text(matches[0])
 
+class attrCoalesce(object):
+    def __init__(self,*args):
+        self.alternatives = [attr(*params) for params in args]
+
+    def __get__(self, obj, objtype):
+        result = None
+        for alternative in self.alternatives:
+            result = alternative.__get__(obj, objtype)
+            if result: return result
+        return result
 
 class attrList(object):
     def __init__(self, selector, klass):

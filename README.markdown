@@ -84,10 +84,12 @@ print "lives at %s" % details.address
 print "with phone # %s" % details.phone
 ```
 ###Missing elements
-What if the element you are looking for is missing? You can specify an alternative element to use with .otherwise():
+What if the element you are looking for is missing? You can specify an alternative element to use thanks to the attrCoalesce class:
 
 ```python
-title = attr('meta[property="og:title"]', attribute='content').otherwise(attr('meta[name="twitter:title"]', attribute='content')).otherwise(attr('title'))
+title = attrCoalesce(('meta[property="og:title"]', 'content'),
+                     ('meta[name="twitter:title"]', 'content'),
+                     ('title',None))
 ```
 
 See the examples folder for other examples.
