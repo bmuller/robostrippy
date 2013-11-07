@@ -89,7 +89,7 @@ What if the element you are looking for is missing? You can specify an alternati
 ```python
 title = attrCoalesce(('meta[property="og:title"]', {'attribute': 'content'}),
                      ('meta[name="twitter:title"]', {'attribute': 'content'}),
-                     ('title'))
+                     'title')
 ```
 
 See the examples folder for other examples.

@@ -46,7 +46,9 @@ class attrCoalesce(object):
 
     def __get__(self, obj, objtype):
         for sargs in self.selectors:
-            if len(sargs) < 2:
+            if not isinstance(sargs, tuple):
+                alt = attr(sargs)
+            elif len(sargs) < 2:
                 alt = attr(sargs[0])
             else:
                 alt = attr(sargs[0], **sargs[1])

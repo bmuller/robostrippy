@@ -10,7 +10,7 @@ class MetadataScraper(Resource):
     title = attrCoalesce(
         ('meta[property="og:title"]', {'attribute': 'content'}),
         ('meta[name="twitter:title"]', {'attribute': 'content'}),
-        ('title'))
+        'title')
     description = attrCoalesce(('meta[property="og:description"]', {'attribute': 'content'}),
                                ('meta[name="twitter:description"]', {'attribute': 'content'}))
 
