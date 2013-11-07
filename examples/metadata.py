@@ -15,11 +15,11 @@ class MetadataScraper(Resource):
                                ('meta[name="twitter:description"]', {'attribute': 'content'}))
 
     def __init__(self, url):
-    	Resource.__init__(self, url)
+        Resource.__init__(self, url)
         print("Scraping page %s ... ... ..." % url)
 
 
-if __name__ == '__main__' : 
+if __name__ == '__main__':
     scraper = MetadataScraper("http://seen.co/event/twitteripo--2013-5386")
     print(scraper.title)
     print(scraper.image)

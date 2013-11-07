@@ -3,6 +3,7 @@ from robostrippy.resource import attr, attrList, Resource
 
 Post = namedtuple('Post', ['title', 'comments', 'points'])
 
+
 class HackerNews(Resource):
     titles = attr("table table:nth-of-type(2) tr td.title a", all=True)
     points = attr("table table:nth-of-type(2) tr td.subtext span", all=True)
