@@ -65,7 +65,7 @@ class attrList(object):
 
     def __get__(self, obj, objtype):
         matches = obj._content.select(self.selector)
-        return [self.klass(None, match) for match in matches]
+        return [self.klass(obj._url, match) for match in matches]
 
 
 class Resource:
@@ -75,13 +75,13 @@ class Resource:
         if self._content is None:
             html = Fetcher.get(self._url)
             self._content = BeautifulSoup(html, "lxml")
-        elif isinstance(self._content, str):
+        elif isinstance(self._content, str) or isinstance(self._content, unicode):
             self._content = BeautifulSoup(self._content, "lxml")
 
     def __str__(self):
         props = []
         for key in dir(self):
-            if not key.startswith("_"):
+            if not key.startswith("_") and not key == "absoluteURL":
                 props.append("%s='%s'" % (key, getattr(self, key)))
         return "<%s %s>" % (self.__class__.__name__, ", ".join(props))
 
