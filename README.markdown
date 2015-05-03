@@ -6,7 +6,7 @@ BeautifulSoup and other Python libs make parsing easy - but they don't make it e
 ## Installation
 
 ```
-easy_install robostrippy
+pip install robostrippy
 ```
 
 ## Usage
