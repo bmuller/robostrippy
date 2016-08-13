@@ -17,7 +17,7 @@ class YellowPagesListItem(Resource):
 
     @property
     def details(self):
-        return YellowPage(self.absoluteURL(self.url))
+        return YellowPage(self.absolute_url(self.url))
 
 
 class YellowPagesList(Resource):

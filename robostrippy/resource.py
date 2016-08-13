@@ -10,9 +10,10 @@ def _text(elem):
     return "".join([s.strip() for s in elem.strings])
 
 
-#pylint: disable=invalid-name,protected-access
+# pylint: disable=invalid-name,protected-access
 class attr:
-    def __init__(self, selectors, attribute=None, all_matches=False, elems=False):
+    def __init__(self, selectors, attribute=None,
+                 all_matches=False, elems=False):
         """
         @param attribute Get attribute from element (default is cdata text)
         @param all_matches Return all matches (not just first)
@@ -30,7 +31,7 @@ class attr:
         matches = obj._content.select(self.selectors[0])
         for selector in self.selectors[1:]:
             selected = [match.select(selector) for match in matches]
-            matches = chain.from_iterable(selected)
+            matches = list(chain.from_iterable(selected))
         if self.elems:
             return matches
         if len(matches) == 0:
