@@ -2,15 +2,20 @@ from itertools import chain
 
 from bs4 import BeautifulSoup
 
-from robostrippy.http import Fetcher
+from robostrippy.http import get
 from robostrippy import utils
 
 
+def _text(elem):
+    return "".join([s.strip() for s in elem.strings])
+
+
+#pylint: disable=invalid-name,protected-access
 class attr:
-    def __init__(self, selectors, attribute=None, all=False, elems=False):
+    def __init__(self, selectors, attribute=None, all_matches=False, elems=False):
         """
         @param attribute Get attribute from element (default is cdata text)
-        @param all Return all matches (not just first)
+        @param all_matches Return all matches (not just first)
         @param elems Return BeautifulSoup elements that match (will return
         list)
         """
@@ -18,11 +23,8 @@ class attr:
         if not isinstance(self.selectors, list):
             self.selectors = [self.selectors]
         self.attribute = attribute
-        self.all = all
+        self.all_matches = all_matches
         self.elems = elems
-
-    def text(self, elem):
-        return "".join([s.strip() for s in elem.strings])
 
     def __get__(self, obj, objtype):
         matches = obj._content.select(self.selectors[0])
@@ -34,12 +36,12 @@ class attr:
         if len(matches) == 0:
             return None
         if self.attribute is not None:
-            if self.all:
+            if self.all_matches:
                 return [match.get(self.attribute) for match in matches]
             return matches[0].get(self.attribute)
-        if self.all:
-            return [self.text(elem) for elem in matches]
-        return self.text(matches[0])
+        if self.all_matches:
+            return [_text(elem) for elem in matches]
+        return _text(matches[0])
 
 
 class attrCoalesce:
@@ -71,11 +73,11 @@ class attrList:
 
 
 class Resource:
-    def __init__(self, url, content=None, headers=None):
+    def __init__(self, url, content=None):
         self._url = url
         self._content = content
         if self._content is None:
-            html = Fetcher.get(self._url)
+            html = get(self._url)
             self._content = BeautifulSoup(html, "lxml")
         elif isinstance(self._content, str):
             self._content = BeautifulSoup(self._content, "lxml")
@@ -83,11 +85,11 @@ class Resource:
     def __str__(self):
         props = []
         for key in dir(self):
-            if not key.startswith("_") and not key == "absoluteURL":
+            if not key.startswith("_") and not key == "absolute_url":
                 props.append("%s='%s'" % (key, getattr(self, key)))
         return "<%s %s>" % (self.__class__.__name__, ", ".join(props))
 
-    def absoluteURL(self, url):
-        return utils.absoluteURL(self._url, url)
+    def absolute_url(self, url):
+        return utils.absolute_url(self._url, url)
 
     __repr__ = __str__

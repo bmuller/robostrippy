@@ -2,5 +2,5 @@ language: python
 python:
   - "3.2"
   - "3.5"
-install: pip install . pep8 pyflakes
-script: pep8 robostrippy && pyflakes robostrippy
+install: pip install . pep8 pylint
+script: pep8 robostrippy && pylint robostrippy

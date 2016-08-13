@@ -1,7 +1,7 @@
 from urllib.parse import urlparse
 
 
-def absoluteURL(baseurl, url):
+def absolute_url(baseurl, url):
     if url.startswith('http://') or url.startswith('https://'):
         return url
 

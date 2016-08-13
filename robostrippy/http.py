@@ -6,15 +6,13 @@ ACCEPT_HEADER = """text/html,application/xhtml+xml,application/xml;q=0.9,\
 */*;q=0.8"""
 
 
-class Fetcher:
-    @classmethod
-    def get(self, url, headers=None):
-        default_headers = {
-            'Accept': ACCEPT_HEADER,
-            'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-            'Accept-Language': 'en-US,en;q=0.8',
-            'User-Agent': USERAGENT_HEADER
-            }
-        default_headers.update(headers or {})
-        req = requests.get(url, headers=default_headers)
-        return req.text
+def get(url, headers=None):
+    default_headers = {
+        'Accept': ACCEPT_HEADER,
+        'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+        'Accept-Language': 'en-US,en;q=0.8',
+        'User-Agent': USERAGENT_HEADER
+    }
+    default_headers.update(headers or {})
+    req = requests.get(url, headers=default_headers)
+    return req.text
