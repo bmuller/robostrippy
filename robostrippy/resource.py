@@ -1,11 +1,12 @@
+from itertools import chain
+
 from bs4 import BeautifulSoup
-from compiler.ast import flatten
 
 from robostrippy.http import Fetcher
 from robostrippy import utils
 
 
-class attr(object):
+class attr:
     def __init__(self, selectors, attribute=None, all=False, elems=False):
         """
         @param attribute Get attribute from element (default is cdata text)
@@ -26,7 +27,8 @@ class attr(object):
     def __get__(self, obj, objtype):
         matches = obj._content.select(self.selectors[0])
         for selector in self.selectors[1:]:
-            matches = flatten([match.select(selector) for match in matches])
+            selected = [match.select(selector) for match in matches]
+            matches = chain.from_iterable(selected)
         if self.elems:
             return matches
         if len(matches) == 0:
@@ -40,7 +42,7 @@ class attr(object):
         return self.text(matches[0])
 
 
-class attrCoalesce(object):
+class attrCoalesce:
     def __init__(self, *args):
         self.selectors = args
 
@@ -58,7 +60,7 @@ class attrCoalesce(object):
         return None
 
 
-class attrList(object):
+class attrList:
     def __init__(self, selector, klass):
         self.selector = selector
         self.klass = klass
@@ -75,7 +77,7 @@ class Resource:
         if self._content is None:
             html = Fetcher.get(self._url)
             self._content = BeautifulSoup(html, "lxml")
-        elif isinstance(self._content, str) or isinstance(self._content, unicode):
+        elif isinstance(self._content, str):
             self._content = BeautifulSoup(self._content, "lxml")
 
     def __str__(self):

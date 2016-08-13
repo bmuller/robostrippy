@@ -1,7 +1,11 @@
-# RoboStrippy
-### Python lib to strip websites. Like a robot.
+# RoboStrippy [![travis][travis-image]][travis-url]
 
-BeautifulSoup and other Python libs make parsing easy - but they don't make it easy to encapsulate that logic in ways that let you treat web resources like objects.  RoboStrippy does.
+[travis-image]: https://img.shields.io/travis/bmuller/robostrippy/master.svg
+[travis-url]: https://travis-ci.org/bmuller/robostrippy
+
+RoboStrippy lets you strip websites. Like a robot.
+
+BeautifulSoup and other Python libs make parsing easy - but they don't make it easy to encapsulate that logic in ways that let you treat web resources like objects.  RoboStrippy does.  The current version is for Python 3.2 and above.
 
 ## Installation
 

@@ -1,2 +1,1 @@
-version_info = (0, 13)
-version = '.'.join(map(str, version_info))
+__version__ = "1.0"

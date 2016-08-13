@@ -1,5 +1,5 @@
 from collections import namedtuple
-from robostrippy.resource import attr, attrList, Resource
+from robostrippy.resource import attr, Resource
 
 Post = namedtuple('Post', ['title', 'comments', 'points'])
 
@@ -21,4 +21,4 @@ class HackerNews(Resource):
 if __name__ == "__main__":
     hn = HackerNews()
     for post in hn.posts:
-        print "%s\n\t%s and %s" % (post.title, post.points, post.comments)
+        print("%s\n\t%s and %s" % (post.title, post.points, post.comments))
