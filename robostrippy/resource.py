@@ -6,7 +6,7 @@ from robostrippy.http import get
 from robostrippy import utils
 
 
-def _text(elem):
+def elem_text(elem):
     return "".join([s.strip() for s in elem.strings])
 
 
@@ -41,8 +41,8 @@ class attr:
                 return [match.get(self.attribute) for match in matches]
             return matches[0].get(self.attribute)
         if self.all_matches:
-            return [_text(elem) for elem in matches]
-        return _text(matches[0])
+            return [elem_text(elem) for elem in matches]
+        return elem_text(matches[0])
 
 
 class attrCoalesce:
