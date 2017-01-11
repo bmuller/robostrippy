@@ -82,6 +82,8 @@ class Resource:
             self._content = BeautifulSoup(html, "lxml")
         elif isinstance(self._content, str):
             self._content = BeautifulSoup(self._content, "lxml")
+        elif isinstance(self._content, bytes):
+            self._content = BeautifulSoup(self._content, "lxml")
 
     def __str__(self):
         props = []
